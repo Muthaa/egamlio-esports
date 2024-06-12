@@ -1,9 +1,11 @@
-"use client"
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import { useAuth }  from '@/components/AuthContext'
 
 const Header = () => {
+    const auth = useAuth();
+    const { user, logout } = auth || {};
     const [loading, setLoading] = useState(true);
     const [scrolled, setScrolled] = useState(false);
     const [scrollTop, setScrollTop] = useState(false);
@@ -150,10 +152,17 @@ const Header = () => {
                                         </li>
                                     </ul>
                                     <div className="right-area header-action d-flex align-items-center max-un">
-                                        <Link href="login" className="login">Login</Link>
-                                        <Link href="register" className="cmn-btn">Sign Up
-                                            <i className="icon-d-right-arrow-2"></i>
-                                        </Link>
+                                        {user ? (
+                                          <>
+                                            <span>{`Welcome, ${user.firstName} ${user.lastName}`}</span>
+                                            <button onClick={logout}>Logout</button>
+                                          </>
+                                        ) : (
+                                          <>
+                                            <Link href="login" className="login">Login</Link>
+                                            <Link href="register" className="cmn-btn">Sign Up <i className="icon-d-right-arrow-2"></i></Link>
+                                          </>
+                                        )}
                                     </div>
                                 </div>
                             </nav>
